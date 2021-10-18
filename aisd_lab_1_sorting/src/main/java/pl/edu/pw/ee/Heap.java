@@ -1,53 +1,87 @@
 package pl.edu.pw.ee;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import pl.edu.pw.ee.services.HeadInterface;
+import pl.edu.pw.ee.services.HeapInterface;
 
-public class Heap implements HeadInterface{
+public class Heap implements HeapInterface {
 
-    private double[] items = new double[16];
+    private List<Comparable> items = new ArrayList<Comparable>();
     private int itemsSize = 0;
 
-
-    private void doubleSize(){
-        double[] tepmoraryTable = new double[items.length * 2];
-        System.arraycopy(items, 0, tepmoraryTable, 0, items.length);
-        items = tepmoraryTable;
+    private void swap(int i, int j) {
+        if (i == j)
+            return;
+        Comparable temp = items.get(i);
+        items.set(i, items.get(j));
+        items.set(j, temp);
     }
 
-    private void swap(int i, int j){
-        double temp = items[i];
-        items[i] = items[j];
-        items[j] = temp;
+    private boolean compareTwo(int first, int second) {
+        return items.get(first).compareTo(items.get(second)) < 0;
+        // jeśli pierwszy jest większy od drugiego: false
+        // jeśli pierwszy jest mniejszy od drugiego: true
+        // jeśli są równe: false
     }
 
-    private int leftChild(int i){
+    private int leftChild(int i) {
         return i * 2 + 1;
     }
 
-    private int rightChild(int i){
+    private int rightChild(int i) {
         return i * 2 + 2;
     }
 
-    private int parent(int i){
+    private int parent(int i) {
         return (i - 1) / 2;
+    }
+
+    private int maxValueIndexFunction(int left, int right) {
+        if (compareTwo(left, right))
+            return right;
+        else
+            return left;
     }
 
     @Override
     public void put(Comparable item) {
-        // TODO Auto-generated method stub
+        items.add(item);
+        itemsSize++;
+
+        int curret = itemsSize - 1;
+        int parent = parent(curret);
+
+        while (curret >= 0 && compareTwo(parent, curret)) {
+            swap(parent, curret);
+            curret = parent;
+            parent = parent(curret);
+        }
     }
 
     @Override
     public Comparable pop() {
-        swap(0, itemsSize - 1);
-        
         int currentPosition = 0;
-        while(leftChild(currentPosition) < itemsSize || rightChild(currentPosition) < itemsSize{
+        int maxValueIndex = 0;
 
-        }
+        swap(0, itemsSize - 1);
+        itemsSize--;
 
-        return null;
+        do {
+            if (rightChild(currentPosition) < itemsSize) {
+                maxValueIndex = maxValueIndexFunction(rightChild(currentPosition), leftChild(currentPosition));
+            } else if (leftChild(currentPosition) < itemsSize) {
+                maxValueIndex = leftChild(currentPosition);
+            }
+
+            if (compareTwo(currentPosition, maxValueIndex)) {
+                swap(currentPosition, maxValueIndex);
+                currentPosition = maxValueIndex;
+            } else
+                break;
+
+        } while (rightChild(currentPosition) < itemsSize || leftChild(currentPosition) < itemsSize);
+
+        return items.get(itemsSize);
     }
 }
