@@ -105,7 +105,7 @@ public class SelectionSortTest {
 
     @Test
     public void should_ReturnTrueValue_ArrayHasManyElements_ElementsAreChooseRandomly() {
-        int SIZE_OF_TABLE = 400000;
+        int SIZE_OF_TABLE = 40000;
 
         Random rand = new Random(311609);
         double[] actuals = new double[SIZE_OF_TABLE];

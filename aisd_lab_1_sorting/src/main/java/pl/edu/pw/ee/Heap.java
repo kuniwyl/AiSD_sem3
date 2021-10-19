@@ -10,9 +10,10 @@ public class Heap implements HeapInterface {
     private List<Comparable> items = new ArrayList<Comparable>();
     private int itemsSize = 0;
 
-    private void swap(int i, int j) {
+    private void swap(int i, int j) throws ArrayIndexOutOfBoundsException {
         if (i == j)
             return;
+
         Comparable temp = items.get(i);
         items.set(i, items.get(j));
         items.set(j, temp);
@@ -20,9 +21,6 @@ public class Heap implements HeapInterface {
 
     private boolean compareTwo(int first, int second) {
         return items.get(first).compareTo(items.get(second)) < 0;
-        // jeśli pierwszy jest większy od drugiego: false
-        // jeśli pierwszy jest mniejszy od drugiego: true
-        // jeśli są równe: false
     }
 
     private int leftChild(int i) {
@@ -44,16 +42,26 @@ public class Heap implements HeapInterface {
             return left;
     }
 
+    public class ArrayIndexOutOfBoundsException extends IndexOutOfBoundsException {
+        public ArrayIndexOutOfBoundsException(IndexOutOfBoundsException e) {
+            super();
+        }
+    }
+
     @Override
     public void put(Comparable item) {
         items.add(item);
         itemsSize++;
-
         int curret = itemsSize - 1;
+
         int parent = parent(curret);
 
         while (curret >= 0 && compareTwo(parent, curret)) {
-            swap(parent, curret);
+            try {
+                swap(parent, curret);
+            } catch (IndexOutOfBoundsException e) {
+                throw new ArrayIndexOutOfBoundsException(e);
+            }
             curret = parent;
             parent = parent(curret);
         }
@@ -64,7 +72,11 @@ public class Heap implements HeapInterface {
         int currentPosition = 0;
         int maxValueIndex = 0;
 
-        swap(0, itemsSize - 1);
+        try {
+            swap(0, itemsSize - 1);
+        } catch (IndexOutOfBoundsException e) {
+            throw new ArrayIndexOutOfBoundsException(e);
+        }
         itemsSize--;
 
         do {
@@ -75,7 +87,11 @@ public class Heap implements HeapInterface {
             }
 
             if (compareTwo(currentPosition, maxValueIndex)) {
-                swap(currentPosition, maxValueIndex);
+                try {
+                    swap(currentPosition, maxValueIndex);
+                } catch (IndexOutOfBoundsException e) {
+                    throw new ArrayIndexOutOfBoundsException(e);
+                }
                 currentPosition = maxValueIndex;
             } else
                 break;

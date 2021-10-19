@@ -105,7 +105,7 @@ public class HeapSortTest {
 
     @Test
     public void should_ReturnTrueValue_ArrayHasManyElements_ElementsAreChooseRandomly() {
-        int SIZE_OF_TABLE = 1000;
+        int SIZE_OF_TABLE = 1000000;
 
         Random rand = new Random(311609);
         double[] actuals = new double[SIZE_OF_TABLE];
