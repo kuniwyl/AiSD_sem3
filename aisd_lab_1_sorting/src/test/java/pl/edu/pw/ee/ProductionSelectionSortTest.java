@@ -23,7 +23,7 @@ public class ProductionSelectionSortTest {
     private double[] getArray_from_0_to_index(int index) {
         double[] res = new double[index];
         for (int i = 0; i < index; i++) {
-            res[i] = i;
+            res[i] = (double) i;
         }
         return res;
     }
@@ -31,7 +31,7 @@ public class ProductionSelectionSortTest {
     private double[] getArray_from_index_to_0(int index) {
         double[] res = new double[index];
         for (int i = 0; i < index; i++) {
-            res[index - i - 1] = i;
+            res[index - i - 1] = (double) i;
         }
         return res;
     }

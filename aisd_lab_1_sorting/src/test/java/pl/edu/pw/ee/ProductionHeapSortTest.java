@@ -23,7 +23,7 @@ public class ProductionHeapSortTest {
     private double[] getArray_from_0_to_index(int index) {
         double[] res = new double[index];
         for (int i = 0; i < index; i++) {
-            res[i] = i;
+            res[i] = (double) i;
         }
         return res;
     }
@@ -31,7 +31,7 @@ public class ProductionHeapSortTest {
     private double[] getArray_from_index_to_0(int index) {
         double[] res = new double[index];
         for (int i = 0; i < index; i++) {
-            res[index - i - 1] = i;
+            res[index - i - 1] = (double) i;
         }
         return res;
     }
@@ -48,39 +48,42 @@ public class ProductionHeapSortTest {
     @Test
     public void getPesymistycData() {
         System.out.println("pesymistyczne");
-        for (int test : tests) {
-            double[] actuals = getArray_from_0_to_index(test);
-            long start = System.currentTimeMillis();
-            sorting.sort(actuals);
-            long end = System.currentTimeMillis();
-            System.out.println(test + " " + (end - start));
-        }
+        // for (int test : tests) {
+        double[] actuals = getArray_from_0_to_index(900000);
+        long start = System.currentTimeMillis();
+        sorting.sort(actuals);
+        long end = System.currentTimeMillis();
+        System.out.println(end - start);
+        // System.out.println(test + " " + (end - start));
+        // }
         System.out.println();
     }
 
     @Test
     public void getOptymisticData() {
         System.out.println("optymistyczne");
-        for (int test : tests) {
-            double[] actuals = getArray_from_index_to_0(test);
-            long start = System.currentTimeMillis();
-            sorting.sort(actuals);
-            long end = System.currentTimeMillis();
-            System.out.println(test + " " + (end - start));
-        }
+        // for (int test : tests) {
+        double[] actuals = getArray_from_index_to_0(900000);
+        long start = System.currentTimeMillis();
+        sorting.sort(actuals);
+        long end = System.currentTimeMillis();
+        System.out.println(end - start);
+        // System.out.println(test + " " + (end - start));
+        // }
         System.out.println();
     }
 
     @Test
     public void getRandomData() {
         System.out.println("random");
-        for (int test : tests) {
-            double[] actuals = getArray_random(test);
-            long start = System.currentTimeMillis();
-            sorting.sort(actuals);
-            long end = System.currentTimeMillis();
-            System.out.println(test + " " + (end - start));
-        }
+        // for (int test : tests) {
+        double[] actuals = getArray_random(900000);
+        long start = System.currentTimeMillis();
+        sorting.sort(actuals);
+        long end = System.currentTimeMillis();
+        System.out.println(end - start);
+        // System.out.println(test + " " + (end - start));
+        // }
         System.out.println();
     }
 

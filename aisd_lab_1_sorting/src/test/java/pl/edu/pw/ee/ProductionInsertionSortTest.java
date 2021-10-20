@@ -48,39 +48,42 @@ public class ProductionInsertionSortTest {
     @Test
     public void getPesymistycData() {
         System.out.println("pesymistyczne");
-        for (int test : tests) {
-            double[] actuals = getArray_from_index_to_0(test);
+        // for (int test : tests) {
+            double[] actuals = getArray_from_index_to_0(20000);
             long start = System.currentTimeMillis();
             sorting.sort(actuals);
             long end = System.currentTimeMillis();
-            System.out.println(test + " " + (end - start));
-        }
+            System.out.println(end - start);
+            // System.out.println(test + " " + (end - start));
+        // }
         System.out.println();
     }
 
     @Test
     public void getOptymisticData() {
         System.out.println("optymistyczne");
-        for (int test : tests) {
-            double[] actuals = getArray_from_0_to_index(test);
+        // for (int test : tests) {
+            double[] actuals = getArray_from_0_to_index(20000);
             long start = System.currentTimeMillis();
             sorting.sort(actuals);
             long end = System.currentTimeMillis();
-            System.out.println(test + " " + (end - start));
-        }
+            System.out.println(end - start);
+            // System.out.println(test + " " + (end - start));
+        // }
         System.out.println();
     }
 
     @Test
     public void getRandomData() {
         System.out.println("random");
-        for (int test : tests) {
-            double[] actuals = getArray_random(test);
+        // for (int test : tests) {
+            double[] actuals = getArray_random(20000);
             long start = System.currentTimeMillis();
             sorting.sort(actuals);
             long end = System.currentTimeMillis();
-            System.out.println(test + " " + (end - start));
-        }
+            System.out.println(end - start);
+            // System.out.println(test + " " + (end - start));
+        // }
         System.out.println();
     }
 
