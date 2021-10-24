@@ -76,7 +76,7 @@ public class QuickSortTest {
     @Test
     public void should_ReturnTrueValue_ElementSetOptimistic_TwoElementsNeedToBeSort() {
         double[] expecteds = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-        double[] actuals = { 1, 2, 3, 5, 4, 6, 7, 8, 9 };
+        double[] actuals = { 5, 3, 2, 4, 1, 7, 6, 8, 9 };
 
         sorting.sort(actuals);
 
