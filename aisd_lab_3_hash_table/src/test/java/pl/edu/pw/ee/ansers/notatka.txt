@@ -1,0 +1,3 @@
+W zależności od rozmiaru tablicy zmienia się czas wyszukiwania elementów.
+W przypadku małej tablicy czas wyszukiwania znacząco się wydłuża. 
+Im większa tablica tym czas wyszukiwania się zmniejsza.

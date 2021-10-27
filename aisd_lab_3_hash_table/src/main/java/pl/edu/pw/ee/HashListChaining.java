@@ -2,17 +2,17 @@ package pl.edu.pw.ee;
 
 import pl.edu.pw.ee.services.HashTable;
 
-public class HashListChaining implements HashTable {
+public class HashListChaining<T extends Comparable<T>> implements HashTable<T> {
 
-    private final Elem nil = null;
-    private Elem[] hashElems;
+    private final Elem<T> nil = null;
+    private Elem<T>[] hashElems;
     private int nElem;
 
-    private class Elem {
-        private Object value;
-        private Elem next;
+    private class Elem<K extends T> {
+        private K value;
+        private Elem<K> next;
 
-        Elem(Object value, Elem nextElem) {
+        Elem(K value, Elem<K> nextElem) {
             this.value = value;
             this.next = nextElem;
         }
@@ -21,51 +21,6 @@ public class HashListChaining implements HashTable {
     public HashListChaining(int size) {
         hashElems = new Elem[size];
         initializeHash();
-    }
-
-    @Override
-    public void add(Object value) {
-        int hashCode = value.hashCode();
-        int hashId = countHashId(hashCode);
-
-        Elem oldElem = hashElems[hashId];
-        while (oldElem != nil && !oldElem.value.equals(value)) {
-            oldElem = oldElem.next;
-        }
-        if (oldElem != nil) {
-            oldElem.value = value;
-        } else {
-            hashElems[hashId] = new Elem(value, hashElems[hashId]);
-            nElem++;
-        }
-    }
-
-    @Override
-    public Object get(Object value) {
-        int hashCode = value.hashCode();
-        int hashId = countHashId(hashCode);
-
-        Elem elem = hashElems[hashId];
-        while (elem != nil && !elem.value.equals(value)) {
-            elem = elem.next;
-        }
-
-        return elem != nil ? elem.value : nil;
-    }
-
-    @Override
-    public String[][] get_table(){
-        String[][] tab = new String[2][10];
-        int n;
-        for(int i = 0; i < hashElems.length; i++){
-            Elem elem = hashElems[i];
-            n = 0;
-            while (elem != nil) {
-                tab[i][n++] = (String) elem.value;
-                elem = elem.next;
-            }
-        }
-        return tab;
     }
 
     public double countLoadFactor() {
@@ -86,4 +41,87 @@ public class HashListChaining implements HashTable {
         return Math.abs(hashCode) % n;
     }
 
+    @Override
+    public void add(T value) {
+        int hashCode = value.hashCode();
+        int hashId = countHashId(hashCode);
+
+        Elem<T> oldElem = hashElems[hashId];
+        while (oldElem != nil && oldElem.value.compareTo(value) != 0) {
+            oldElem = oldElem.next;
+        }
+        if (oldElem != nil) {
+            oldElem.value.compareTo(value);
+        } else {
+            hashElems[hashId] = new Elem<T>(value, hashElems[hashId]);
+            nElem++;
+        }
+    }
+
+    @Override
+    public T get(T value) {
+        int hashCode = value.hashCode();
+        int hashId = countHashId(hashCode);
+        Elem<T> elem = hashElems[hashId];
+        while (elem != nil && elem.value.compareTo(value) != 0) {
+            elem = elem.next;
+        }
+        return elem != nil ? elem.value : null;
+    }
+
+    @Override
+    public void delete(T value) {
+        int hashCode = value.hashCode();
+        int hashId = countHashId(hashCode);
+        Elem<T> head = hashElems[hashId];
+
+        if (head == nil) {
+            return;
+        }
+        if (head.value.compareTo(value) == 0) {
+            if (head.next != nil) {
+                head.value = head.next.value;
+                head.next = head.next.next;
+            } else {
+                hashElems[hashId] = nil;
+            }
+        } else {
+            while (head.next != nil && head.next.value.compareTo(value) != 0) {
+                head = head.next;
+            }
+            if (head.next.value.compareTo(value) == 0 && head.next.next == nil) {
+                head.next = nil;
+            } else if (head.next.value.compareTo(value) == 0) {
+                head.next = head.next.next;
+            }
+        }
+    }
+
+    // Test only
+    @Override
+    public boolean isEmpty() {
+        boolean s = true;
+        for (int i = 0; i < hashElems.length; i++) {
+            if (hashElems[i] != nil)
+                s = false;
+        }
+        return s;
+    }
+
+    // Test only
+    @Override
+    public String[][] getList() {
+        String[][] tab = new String[hashElems.length][100000];
+
+        for (int i = 0; i < hashElems.length; i++) {
+            Elem<T> elem = hashElems[i];
+            int j = 0;
+            while (elem != nil) {
+                tab[i][j++] = (String) elem.value;
+                elem = elem.next;
+            }
+        }
+
+        return tab;
+    }
 }
