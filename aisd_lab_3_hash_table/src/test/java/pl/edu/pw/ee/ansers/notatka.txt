@@ -1,3 +1,22 @@
 W zależności od rozmiaru tablicy zmienia się czas wyszukiwania elementów.
-W przypadku małej tablicy czas wyszukiwania znacząco się wydłuża. 
+W przypadku małej ilości miejsca w tablicy czas wyszukiwania znacząco się wydłuża. 
 Im większa tablica tym czas wyszukiwania się zmniejsza.
+
+Porównujac czas do ilości elementów w tablicy:
+l.p.    czas
+4096	55,4
+8192	21,8
+16384	14,7
+32768	10,8
+65536	8,9
+131072	5,4
+262144	4,1
+
+Patrząc na te liczby nie wynika tyle, że im większa tablica tym lepiej.
+Jednak porównując czas to wielkości kolejnych elementów można zauważyć,
+że nie spadają liniowo. Największy spadek jest na początku gdzie wynosi ponad 2x,
+jednak potem szybko maleje w kierunki 1. Najlepszy wielkość tablicy będzie wtedy gdy 
+liczba elementów tablicy będzie powyżej oczekiwanej liczby a ich stosunek mniejszy od 1
+Biorąc te fakty pod uwagę można stwierdzić że najlepszą opcją jest rekord gdzie l.p. 
+wynosi 131072 elemntów a czas 5,4. Wzięcie tablicy większe nie zwiększa w znaczący sposób wydajności,
+a wzięcie mniejszej zwiększa czas oczekiwania prawie 2 razy.
