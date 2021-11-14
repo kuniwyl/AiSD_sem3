@@ -7,4 +7,7 @@ public interface HashTable<T extends Comparable<T>> {
     T get(T elem);
 
     void delete(T elem);
+
+    // Test
+    T[] getArray();
 }

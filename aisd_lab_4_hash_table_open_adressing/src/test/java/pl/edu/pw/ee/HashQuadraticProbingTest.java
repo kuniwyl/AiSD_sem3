@@ -10,40 +10,40 @@ import pl.edu.pw.ee.exceptions.NotInListException;
 import pl.edu.pw.ee.exceptions.NullValueException;
 import pl.edu.pw.ee.services.HashTable;
 
-public class HashLinearProbingTest {
+public class HashQuadraticProbingTest {
 
     // Except tests
     @Test(expected = NullValueException.class)
     public void should_ThrowException_WhenAddNull() {
-        HashTable<Double> hash = new HashLinearProbing<>();
+        HashTable<Double> hash = new HashQuadraticProbing<>();
         hash.put(null);
         assert false;
     }
 
     @Test(expected = NullValueException.class)
     public void should_ThrowException_WhenGetNull() {
-        HashTable<Double> hash = new HashLinearProbing<>();
+        HashTable<Double> hash = new HashQuadraticProbing<>();
         hash.get(null);
         assert false;
     }
 
     @Test(expected = NullValueException.class)
     public void should_ThrowException_WhenDeleteNull() {
-        HashTable<Double> hash = new HashLinearProbing<>();
+        HashTable<Double> hash = new HashQuadraticProbing<>();
         hash.delete(null);
         assert false;
     }
 
     @Test(expected = NotInListException.class)
     public void should_ThrowException_GetNotExisting() {
-        HashTable<String> hash = new HashLinearProbing<>();
+        HashTable<String> hash = new HashQuadraticProbing<>();
         hash.get("b");
         assert false;
     }
 
     @Test(expected = NotInListException.class)
     public void should_ThrowException_DeleteNotExisting() {
-        HashTable<String> hash = new HashLinearProbing<>();
+        HashTable<String> hash = new HashQuadraticProbing<>();
         hash.delete("b");
         assert false;
     }
@@ -54,7 +54,7 @@ public class HashLinearProbingTest {
         int initialSize = 0;
 
         // when
-        HashTable<Double> hash = new HashLinearProbing<>(initialSize);
+        HashTable<Double> hash = new HashQuadraticProbing<>(initialSize, 2, 5);
 
         // then
         assert false;
@@ -63,7 +63,7 @@ public class HashLinearProbingTest {
     // True test
     @Test
     public void should_ReturnTrue_AddElement_GetElement() {
-        HashTable<Double> hash = new HashLinearProbing<>();
+        HashTable<Double> hash = new HashQuadraticProbing<>();
         Double elem = 3.4;
         hash.put(elem);
         assertEquals(elem, hash.get(elem));
@@ -71,7 +71,7 @@ public class HashLinearProbingTest {
 
     @Test
     public void should_ReturnTrue_AddElement_DeleteElement() {
-        HashTable<Double> hash = new HashLinearProbing<>();
+        HashTable<Double> hash = new HashQuadraticProbing<>();
         Double elem = 6.4;
         int sizeBeforePut = getNumOfElems(hash);
         hash.put(elem);
@@ -87,7 +87,7 @@ public class HashLinearProbingTest {
     @Test
     public void should_CorrectlyAddNewElems_WhenNotExistInHashTable() {
         // given
-        HashTable<String> emptyHash = new HashLinearProbing<>();
+        HashTable<String> emptyHash = new HashQuadraticProbing<>();
         String newEleme = "nothing special";
 
         // when
@@ -102,7 +102,8 @@ public class HashLinearProbingTest {
 
     @Test
     public void should_CorrectlyAddNewElems_WhenFewElements() {
-        HashTable<String> hash = new HashLinearProbing<>();
+        // given
+        HashTable<String> hash = new HashQuadraticProbing<>();
         String[] table = { "a1", "a2", "a3", "a4", "a5" };
 
         for (int i = 0; i < table.length; i++) {
@@ -115,11 +116,12 @@ public class HashLinearProbingTest {
 
     @Test
     public void should_CheckIfAfterDeletingPlaceIsPUSTE_Double() {
+        // given
         HashTable<Double> hash = new HashQuadraticProbing<>(2, 1.4, 2.4);
         Double[] table = { 1., 2., 3., 4., 5., 6., 7., 8., 9., 10. };
 
         for (int i = 0; i < table.length; i++) {
-            hash.put(table[i]);
+            hash.put((Double) table[i]);
         }
 
         hash.delete(5.);
@@ -134,12 +136,11 @@ public class HashLinearProbingTest {
                 suma++;
         }
         assertEquals(4, suma);
-
     }
 
     @Test
     public void should_CheckIfAfterDeletingPlaceIsPUSTE_String() {
-        HashTable<String> hash = new HashLinearProbing<>(2);
+        HashTable<String> hash = new HashQuadraticProbing<>(2, 6.7, 2.3);
         String[] table = { "a1", "a2", "a3", "a4", "a5", "a6", "a7", "a8" };
         for (int i = 0; i < table.length; i++) {
             hash.put(table[i]);

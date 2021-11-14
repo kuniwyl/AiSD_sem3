@@ -10,40 +10,40 @@ import pl.edu.pw.ee.exceptions.NotInListException;
 import pl.edu.pw.ee.exceptions.NullValueException;
 import pl.edu.pw.ee.services.HashTable;
 
-public class HashLinearProbingTest {
+public class HashDoubleHashingTest {
 
     // Except tests
     @Test(expected = NullValueException.class)
     public void should_ThrowException_WhenAddNull() {
-        HashTable<Double> hash = new HashLinearProbing<>();
+        HashTable<Double> hash = new HashDoubleHashing<>();
         hash.put(null);
         assert false;
     }
 
     @Test(expected = NullValueException.class)
     public void should_ThrowException_WhenGetNull() {
-        HashTable<Double> hash = new HashLinearProbing<>();
+        HashTable<Double> hash = new HashDoubleHashing<>();
         hash.get(null);
         assert false;
     }
 
     @Test(expected = NullValueException.class)
     public void should_ThrowException_WhenDeleteNull() {
-        HashTable<Double> hash = new HashLinearProbing<>();
+        HashTable<Double> hash = new HashDoubleHashing<>();
         hash.delete(null);
         assert false;
     }
 
     @Test(expected = NotInListException.class)
     public void should_ThrowException_GetNotExisting() {
-        HashTable<String> hash = new HashLinearProbing<>();
+        HashTable<String> hash = new HashDoubleHashing<>();
         hash.get("b");
         assert false;
     }
 
     @Test(expected = NotInListException.class)
     public void should_ThrowException_DeleteNotExisting() {
-        HashTable<String> hash = new HashLinearProbing<>();
+        HashTable<String> hash = new HashDoubleHashing<>();
         hash.delete("b");
         assert false;
     }
@@ -54,7 +54,7 @@ public class HashLinearProbingTest {
         int initialSize = 0;
 
         // when
-        HashTable<Double> hash = new HashLinearProbing<>(initialSize);
+        HashTable<Double> hash = new HashDoubleHashing<>(initialSize);
 
         // then
         assert false;
@@ -63,7 +63,7 @@ public class HashLinearProbingTest {
     // True test
     @Test
     public void should_ReturnTrue_AddElement_GetElement() {
-        HashTable<Double> hash = new HashLinearProbing<>();
+        HashTable<Double> hash = new HashDoubleHashing<>();
         Double elem = 3.4;
         hash.put(elem);
         assertEquals(elem, hash.get(elem));
@@ -71,7 +71,7 @@ public class HashLinearProbingTest {
 
     @Test
     public void should_ReturnTrue_AddElement_DeleteElement() {
-        HashTable<Double> hash = new HashLinearProbing<>();
+        HashTable<Double> hash = new HashDoubleHashing<>();
         Double elem = 6.4;
         int sizeBeforePut = getNumOfElems(hash);
         hash.put(elem);
@@ -87,7 +87,7 @@ public class HashLinearProbingTest {
     @Test
     public void should_CorrectlyAddNewElems_WhenNotExistInHashTable() {
         // given
-        HashTable<String> emptyHash = new HashLinearProbing<>();
+        HashTable<String> emptyHash = new HashDoubleHashing<>();
         String newEleme = "nothing special";
 
         // when
@@ -102,7 +102,7 @@ public class HashLinearProbingTest {
 
     @Test
     public void should_CorrectlyAddNewElems_WhenFewElements() {
-        HashTable<String> hash = new HashLinearProbing<>();
+        HashTable<String> hash = new HashDoubleHashing<>();
         String[] table = { "a1", "a2", "a3", "a4", "a5" };
 
         for (int i = 0; i < table.length; i++) {
@@ -134,22 +134,25 @@ public class HashLinearProbingTest {
                 suma++;
         }
         assertEquals(4, suma);
-
     }
 
     @Test
     public void should_CheckIfAfterDeletingPlaceIsPUSTE_String() {
-        HashTable<String> hash = new HashLinearProbing<>(2);
+        HashTable<String> hash = new HashDoubleHashing<>(2);
         String[] table = { "a1", "a2", "a3", "a4", "a5", "a6", "a7", "a8" };
         for (int i = 0; i < table.length; i++) {
             hash.put(table[i]);
         }
         hash.delete("a1");
+        hash.delete("a3");
+        hash.delete("a5");
+        hash.delete("a8");
         Comparable[] list = hash.getArray();
         for (int i = 0; i < list.length; i++) {
             if (list[i] == "SWPzI7PjYli")
                 assert true;
         }
+
     }
 
     private int getNumOfElems(HashTable<?> hash) {
