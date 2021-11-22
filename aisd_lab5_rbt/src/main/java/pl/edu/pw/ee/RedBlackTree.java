@@ -7,6 +7,45 @@ public class RedBlackTree<K extends Comparable<K>, V> {
 
     private Node<K, V> root;
 
+    private String pre_order_rek(Node<K, V> node){
+        String ans = null;
+        ans = ans + " " + node.getKey() + ":" + node.getValue();
+        ans = ans + " " + pre_order_rek(node.getLeft());
+        ans = ans + " " + pre_order_rek(node.getRight());
+        return ans;
+    }
+
+    public String pre_order(){
+        String ans = pre_order_rek(root);
+        return ans.substring(1, ans.length());
+    }
+
+    private String in_order_rek(Node<K, V> node){
+        String ans = null;
+        ans = ans + " " + pre_order_rek(node.getLeft());
+        ans = ans + " " + node.getKey() + ":" + node.getValue();
+        ans = ans + " " + pre_order_rek(node.getRight());
+        return ans;
+    }
+
+    public String in_order(){
+        String ans = in_order_rek(root);
+        return ans.substring(1, ans.length());
+    }
+
+    private String post_order_rek(Node<K, V> node){
+        String ans = null;
+        ans = ans + " " + pre_order_rek(node.getLeft());
+        ans = ans + " " + pre_order_rek(node.getRight());
+        ans = ans + " " + node.getKey() + ":" + node.getValue();
+        return ans;
+    }
+
+    public String post_order(){
+        String ans = post_order_rek(root);
+        return ans.substring(1, ans.length());
+    }
+
     public V get(K key) {
         validateKey(key);
         Node<K, V> node = root;
