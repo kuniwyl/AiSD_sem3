@@ -1,62 +1,29 @@
 package pl.edu.pw.ee;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
 
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+public class ProductionQuadraticTest extends ProductionTesting {
 
-import pl.edu.pw.ee.services.HashTable;
-
-public class ProductionQuadraticTest {
-
-    private HashTable<String> hashTable;
-    private String[] strs = new String[100000];
-    private int[] sizes = { 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144 };
-    private double[] a = { 1.1, 1.3, 1.5, 1.7, 1.9, 2.1, 2.3, 2.5, 3.1, 3.5 };
-    private double[] b = { 1.2, 1.4, 1.6, 1.8, 2.0, 2.2, 2.4, 2.6, 3.3, 3.7 };
-    // 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536,
-
-    @BeforeClass
-    public static void set() {
-        try {
-            BufferedWriter writer = new BufferedWriter(
-                    new FileWriter("src\\test\\java\\pl\\edu\\pw\\ee\\resourse\\resultsQua.txt", false));
-            writer.append("");
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    @Override
+    void createHash(int size) {
+        return;
     }
 
-    @Before
-    public void setUp() {
-        BufferedReader reader;
-        try {
-            reader = new BufferedReader(new FileReader("src\\test\\java\\pl\\edu\\pw\\ee\\resourse\\words.txt"));
-            String a = reader.readLine();
-            int n = 0;
+    @Override
+    String getFile() {
+        return "src\\test\\java\\pl\\edu\\pw\\ee\\resourse\\resultsQua.txt";
+    };
 
-            while (a != null) {
-                strs[n++] = a;
-                a = reader.readLine();
-            }
-            reader.close();
-        } catch (FileNotFoundException e) {
-        } catch (IOException e) {
-        }
-    }
+    private double[] a = { 1.0, 1.3, 1.6, 1.9, 2.2, 2.5, 2.8, 3.1, 3.4, 3.7 };
+    private double[] b = { 2.0, 2.4, 2.8, 3.2, 3.6, 4.0, 4.4, 4.8, 5.2, 5.6 };
 
     private void getToFile(long[] input, long[] get, int title, double a, double b) {
         try {
             BufferedWriter writer = new BufferedWriter(
-                    new FileWriter("src\\test\\java\\pl\\edu\\pw\\ee\\resourse\\resultsQua.txt", true));
+                    new FileWriter(fileOutputName, true));
             writer.append(title + " " + a + " " + b + "\n");
             for (int i = 0; i < 30; i++) {
                 writer.append(input[i] + "\t");
@@ -73,8 +40,8 @@ public class ProductionQuadraticTest {
         }
     }
 
-    @Test
-    public void test() {
+    @Override
+    public void Production() {
 
         for (int x = 0; x < 10; x++) {
             for (int y = 0; y < 10; y++) {

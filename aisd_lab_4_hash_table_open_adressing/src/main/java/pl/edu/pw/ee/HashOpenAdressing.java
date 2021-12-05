@@ -1,5 +1,7 @@
 package pl.edu.pw.ee;
 
+import java.util.UUID;
+
 import pl.edu.pw.ee.exceptions.NotInListException;
 import pl.edu.pw.ee.exceptions.NullValueException;
 import pl.edu.pw.ee.services.HashTable;
@@ -10,7 +12,7 @@ public abstract class HashOpenAdressing<T extends Comparable<T>> implements Hash
     private int size;
     private int nElems;
     private T[] hashElems;
-    private final T PUSTY = (T) "SWPzI7PjYli";
+    private final String PUSTY = UUID.randomUUID().toString();
     private final double correctLoadFactor;
 
     HashOpenAdressing() {
@@ -34,9 +36,15 @@ public abstract class HashOpenAdressing<T extends Comparable<T>> implements Hash
         int i = 0;
         int hashId = hashFunc(key, i);
 
-        while (hashElems[hashId] != nil && hashElems[hashId].compareTo(newElem) != 0 && hashElems[hashId] != PUSTY) {
+        while (hashElems[hashId] != nil && hashElems[hashId].compareTo(newElem) != 0
+                && hashElems[hashId] != (T) PUSTY && i < size) {
             i = i + 1;
             hashId = hashFunc(key, i);
+        }
+        if(i == size){
+            doubleResize();
+            put(newElem);
+            return;
         }
 
         hashElems[hashId] = newElem;
@@ -54,6 +62,9 @@ public abstract class HashOpenAdressing<T extends Comparable<T>> implements Hash
         while (hashElems[hashId] != nil && hashElems[hashId].compareTo(elem) != 0) {
             i = i + 1;
             hashId = hashFunc(key, i);
+            if (i > size) {
+                break;
+            }
         }
 
         if (hashElems[hashId] == null || hashElems[hashId].compareTo(elem) != 0)
@@ -74,12 +85,15 @@ public abstract class HashOpenAdressing<T extends Comparable<T>> implements Hash
         while (hashElems[hashId] != nil && hashElems[hashId].compareTo(elem) != 0) {
             i = (i + 1) % size;
             hashId = hashFunc(key, i);
+            if (i >= size) {
+                break;
+            }
         }
 
         if (hashElems[hashId] == null || hashElems[hashId].compareTo(elem) != 0)
             throw new NotInListException("Element is not in the list");
         else if (hashElems[hashId].compareTo(elem) == 0) {
-            hashElems[hashId] = PUSTY;
+            hashElems[hashId] = (T) PUSTY;
             nElems--;
         } else
             return;
@@ -90,6 +104,11 @@ public abstract class HashOpenAdressing<T extends Comparable<T>> implements Hash
     @Override
     public T[] getArray() {
         return hashElems;
+    }
+
+    @Override
+    public String getUidd() {
+        return PUSTY;
     }
 
     private void validateHashInitSize(int initialSize) {
@@ -140,30 +159,14 @@ public abstract class HashOpenAdressing<T extends Comparable<T>> implements Hash
     }
 
     private void doubleResize() {
-        this.size *= 2;
-        if (size < 0) {
-            throw new ArrayIndexOutOfBoundsException("List size is bigger than max value of int");
-        } else {
-            T[] newHash = (T[]) new Comparable[this.size];
-            int key;
-            int j;
-            int hashId;
-            for (int i = 0; i < hashElems.length; i++) {
-                if (hashElems[i] != nil) {
-                    T elem = hashElems[i];
-
-                    key = elem.hashCode();
-                    j = 0;
-                    hashId = hashFunc(key, j);
-                    while (newHash[hashId] != nil && newHash[hashId].compareTo(elem) != 0) {
-                        j = j + 1;
-                        hashId = hashFunc(key, j);
-                    }
-
-                    newHash[hashId] = elem;
-                }
+        T[] oldHash = hashElems;
+        size *= 2;
+        nElems = 0;
+        hashElems = (T[]) new Comparable[size];
+        for (T i : oldHash) {
+            if (i != nil && i != PUSTY) {
+                put(i);
             }
-            hashElems = newHash;
         }
     }
 }

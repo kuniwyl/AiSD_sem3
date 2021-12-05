@@ -13,6 +13,9 @@ public class HashQuadraticProbing<T extends Comparable<T>> extends HashOpenAdres
 
     HashQuadraticProbing(int size, double a, double b) {
         super(size);
+        if (a == 0 || b == 0) {
+            throw new IllegalArgumentException("A or B cannot by 0");
+        }
         this.a = a;
         this.b = b;
     }

@@ -10,4 +10,6 @@ public interface HashTable<T extends Comparable<T>> {
 
     // Test
     T[] getArray();
+
+    String getUidd();
 }

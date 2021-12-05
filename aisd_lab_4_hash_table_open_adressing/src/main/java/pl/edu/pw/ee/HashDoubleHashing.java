@@ -7,7 +7,7 @@ public class HashDoubleHashing<T extends Comparable<T>> extends HashOpenAdressin
     }
 
     HashDoubleHashing(int size) {
-        super(size);
+        super(size != 3 ? size : 4);
     }
 
     @Override
@@ -19,14 +19,6 @@ public class HashDoubleHashing<T extends Comparable<T>> extends HashOpenAdressin
         hash = hash < 0 ? -hash : hash;
 
         return hash;
-    }
-
-    private double f_k(double k) {
-        return k % getSize();
-    }
-
-    private double g_k(double k) {
-        return 1 + (k % (getSize() - 3));
     }
 
 }
