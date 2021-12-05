@@ -1,0 +1,9 @@
+W  przypadku hashowanie linearnego czas wprowadzania spada wraz ze zwrostem miejsca początkowego. Jednak czas wyszukiwania nie spada wraz ze zwrostem liczby elementów. Czas wyszukiwanie jest mniej więcej podobny dla wszystkich wieklości końcowa wielkość tablicy dla każdego elementu jest taka sama czyli 131072. Jednakże w przypadku ostatniej wielkości (262144) liczba elementów jest większa więc więc czas wprowadzania jest znacznie szybsze.
+
+W hashowaniu podwójnym sytuacja wygląda podobnie jednakże czasy wczytywania i wyszukiwania są znacznie mniejsze, ponieważ elementy są znacznie bardziej porozrzucane po tablicy dlatego występują mniejsze skupiska elementów i wprowadzanie / wyszukiwanie jest szybsze.
+
+W hashowaniu kwadratowym czasy wyszukiwania są mniej więcej podobne jednakże czasy wprowadzania zmieniają się w stopniu nieznacznym w zależności od wartści a i b, czasy wprowadzania zmieniaja się jedynie w zależności od wielkości tablicy.
+
+Podsumowanie:
+Najlepsze jest hashowanie funkcyjne, ponieważ elementy są najbardzie od siebie oddalone i mają najmniejszą szansę na trafienie powtórki.
+Najgorsze jest hashowanie liniowe.
