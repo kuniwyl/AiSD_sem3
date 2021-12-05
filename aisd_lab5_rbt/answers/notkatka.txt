@@ -1,0 +1,4 @@
+Wykres jest logarytmiczny co do ilości elementów.
+Liczba wstawień jest mniej więcej proporcjonalna to potęgi 2 liczby wywołań rekurencyjnych.
+liczba elementów == 2 ^ (liczba wywołań rekurencyjnych)
+Algorytm jest szybki przy 1000000 elementów czas wstawiania elementu wynosi jednyne 20 operacji.
