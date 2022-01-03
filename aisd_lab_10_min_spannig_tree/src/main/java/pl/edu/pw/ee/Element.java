@@ -25,6 +25,11 @@ public class Element implements Comparable<Element>{
     }
 
     @Override
+    public String toString() {
+        return first + "_" + String.valueOf(value) + "_" + second;
+    }
+
+    @Override
     public int compareTo(Element o) {
         return Integer.compare(this.value, o.getValue());
     }

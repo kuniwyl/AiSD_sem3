@@ -1,39 +1,57 @@
 package pl.edu.pw.ee;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintStream;
-import java.util.Scanner;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.Before;
 
 import pl.edu.pw.ee.services.MinSpanningTree;
 
 public class PrimAlgorithmTest {
-    
-    // private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-    // private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
-    // private final PrintStream originalOut = System.out;
-    // private final PrintStream originalErr = System.err;
 
-    // @Before
-    // public void setUpStreams() {
-    //     System.setOut(new PrintStream(outContent));
-    //     System.setErr(new PrintStream(errContent));
-    // }
+    private MinSpanningTree t;
 
-    // @After
-    // public void restoreStreams() {
-    //     System.setOut(originalOut);
-    //     System.setErr(originalErr);
-    // }
+    @Before
+    public void setUp() {
+        t = new PrimAlgorithm();
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void shouldReturnException_RuntimeException_FileNameIsNull() {
+        String a = t.findMST(null);
+        assert false;
+    }
+
+    // do poprawy
+    @Test(expected = RuntimeException.class)
+    public void shouldReturnException_FileNotFoundException_FileNameNotExist() {
+        String a = t.findMST("temporary.txt");
+        assert false;
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldReturnException_IllegalArgumentException_FileContainBannedValued() {
+        String a = t.findMST("src\\test\\java\\pl\\edu\\pw\\ee\\testData\\bad_data.txt");
+        assert false;
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldReturnException_IllegalArgumentException_FileContainNotConnectedGraph() {
+        String a = t.findMST("src\\test\\java\\pl\\edu\\pw\\ee\\testData\\not_connected.txt");
+        assert false;
+    }
+
+    // @Test(expected = IllegalArgumentException.class)
+    public void shouldReturnException_IllegalArgumentException_FileIsEmpty() {
+        System.out.println("empty");
+        String a = t.findMST("src\\test\\java\\pl\\edu\\pw\\ee\\testData\\empty.txt");
+        assert false;
+    }
 
     @Test
-    public void test(){
-        MinSpanningTree t = new PrimAlgorithm();
-        t.findMST("src\\test\\java\\pl\\edu\\pw\\ee\\testData\\small_data.txt");
-    }   
+    public void shouldReturnTrue_ExampleFromISOD() {
+        String actual = t.findMST("src\\test\\java\\pl\\edu\\pw\\ee\\testData\\small_data.txt");
+        String expected = "A_3_B|B_1_C|C_1_D|D_7_E";
+        assertEquals(expected, actual);
+    }
+
 }
