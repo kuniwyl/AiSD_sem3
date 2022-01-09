@@ -1,42 +1,49 @@
 package pl.edu.pw.ee;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Scanner;
 
+import pl.edu.pw.ee.Exceptions.FileIsEmptyException;
+import pl.edu.pw.ee.Exceptions.GraphIsNotCompleteException;
+import pl.edu.pw.ee.Exceptions.IllegalFormatDataException;
 import pl.edu.pw.ee.services.MinSpanningTree;
 
 public class KruskalAlgorithm implements MinSpanningTree {
 
     private Heap heap = new Heap();
-    private ArrayList<KruskalElement> lista = new ArrayList<>();
+    private ArrayList<ArrayList<String>> lista = new ArrayList<>();
 
     @Override
     public String findMST(String pathToFile) {
+        if(pathToFile == null){
+            throw new IllegalArgumentException("path to file cannot be null");
+        }
         readData(pathToFile);
         return kruskal();
     }
 
     private void readData(String path){
         try {
-            File myObj = new File(path);
-            Scanner myReader = new Scanner(myObj);
-            while (myReader.hasNextLine()) {
-                String data = myReader.nextLine();
-                createData(data);
+            BufferedReader reader = new BufferedReader(new FileReader(path));
+            String line = reader.readLine();
+            if(line == null){
+                reader.close();
+                throw new FileIsEmptyException("FIle is empty");
             }
-            myReader.close();
-        } catch (FileNotFoundException e) {
-            if(path == null){
-                throw new RuntimeException("filename cannot be null");
+            while (line != null) {
+                createData(line);
+                line = reader.readLine();
             }
-            throw new RuntimeException("File not found");
+            reader.close();
+        } catch (IOException e) {
         }
     }
 
     private void createData(String data){
         String[] d = data.split(" ");
+        validateData(d);
         heap.put(new Element(d[0], d[1], Integer.valueOf(d[2])));
         putIfNotContaintToList(d[0]);
         putIfNotContaintToList(d[1]);
@@ -48,15 +55,19 @@ public class KruskalAlgorithm implements MinSpanningTree {
                 return; 
             }
         }
-        lista.add(new KruskalElement());
-        lista.get(lista.size() - 1).put(a);
+        lista.add(new ArrayList<>());
+        lista.get(lista.size() - 1).add(a);
     }
 
     private String kruskal(){
         Element top = heap.pop();
         int first = -1;
         int second = -1;
+        ArrayList<String> toDelete;
+        String ans = "";
+
         while(lista.size() > 1 && top != null){
+
             for(int i = 0; i < lista.size(); i++){
                 if(lista.get(i).contains(top.getFirst())){
                     first = i;
@@ -65,60 +76,44 @@ public class KruskalAlgorithm implements MinSpanningTree {
                     second = i;
                 }
             }
+
             if(first == -1 || second == -1){
                 throw new IllegalArgumentException();
             }
+            
             if(first != second){
-                KruskalElement temp = new KruskalElement();
-                System.out.println(lista.get(first));
-                System.out.println(lista.get(second));
-                System.out.println();
+                ArrayList<String> temp = new ArrayList<>();
                 for(int i = 0; i < lista.get(first).size(); i++){
-                    temp.put(lista.get(first).get(i));
+                    temp.add(lista.get(first).get(i));
                 }
                 for(int i = 0; i < lista.get(second).size(); i++){
-                    temp.put(lista.get(second).get(i));
+                    temp.add(lista.get(second).get(i));
                 }
-                lista.remove(first);
-                lista.remove(second);
+
+                toDelete = lista.get(second);
+                lista.remove(lista.get(first));
+                lista.remove(toDelete);
                 lista.add(temp);
+                ans += top.toString() + "|";
             }
+            
             top = heap.pop();
         }
-        return lista.get(0).toString();
+
+        if(lista.size() > 1){
+            throw new GraphIsNotCompleteException("Graph is not Completed");
+        }
+
+        return ans.substring(0, ans.length() - 1);
     }
 
-    private class KruskalElement{
-        private ArrayList<String> elements = new ArrayList<>();
-
-        public void put(String x){
-            elements.add(x);
+    private void validateData(String[] t){
+        if(t.length != 3){
+            throw new IllegalFormatDataException("File contain illegal line");
         }
-
-        public String get(int index){
-            return elements.get(index);
-        }
-        
-        public boolean contains(String a){
-            return elements.contains(a);
-        }
-
-        public void remove(String a){
-            lista.remove(a);
-        }
-
-        public int size(){
-            return elements.size();
-        }
-
-        @Override
-        public String toString() {
-            String a = "";
-            for(int i = 0; i < elements.size(); i++){
-                a += elements.get(i);
-            }
-            return a;
+        if(t[0].equals(t[1]) || Integer.valueOf(t[2]) < 0){
+            throw new IllegalFormatDataException("File contain illegal line");
         }
     }
-    
+
 }

@@ -16,10 +16,13 @@ public class GraphElement {
     }
 
     public Element getElements(){
-        String subName = list.get(0).getSubElementName();
-        int value = list.get(0).getConnectionValue();
-        list.remove(0);
-        return new Element(name, subName, value);
+        if(!isEmpty()){
+            String subName = list.get(0).getSubElementName();
+            int value = list.get(0).getConnectionValue();
+            list.remove(0);
+            return new Element(name, subName, value);
+        }
+        return null;
     }
 
     public ArrayList<GraphSubElement> getList() {

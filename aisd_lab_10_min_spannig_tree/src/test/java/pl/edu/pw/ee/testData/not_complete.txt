@@ -1,0 +1,5 @@
+A B 2
+B C 3
+C A 1
+D E 2
+E G 9

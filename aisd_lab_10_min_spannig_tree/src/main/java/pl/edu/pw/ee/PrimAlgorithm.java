@@ -1,40 +1,45 @@
 package pl.edu.pw.ee;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Scanner;
 
+import pl.edu.pw.ee.Exceptions.FileIsEmptyException;
+import pl.edu.pw.ee.Exceptions.GraphIsNotCompleteException;
+import pl.edu.pw.ee.Exceptions.IllegalFormatDataException;
 import pl.edu.pw.ee.services.MinSpanningTree;
 
 public class PrimAlgorithm implements MinSpanningTree {
 
     private ArrayList<GraphElement> graphElements = new ArrayList<>();
+    private ArrayList<String> added = new ArrayList<>();
+    private Heap heap = new Heap();
 
     @Override
     public String findMST(String pathToFile) {
+        if(pathToFile == null){
+            throw new IllegalArgumentException("path to file cannot be null");
+        }
         readFile(pathToFile);
         String a = addToHeap();
-        validateIfGraphIsConnected(a);
         return a;
     }
 
     private void readFile(String filePath){
         try {
-            File myObj = new File(filePath);
-            Scanner myReader = new Scanner(myObj);
-            validateMyReader(myReader);
-            while (myReader.hasNextLine()) {
-                String data = myReader.nextLine();
-                System.out.println(data);
-                createElement(data);
+            BufferedReader reader = new BufferedReader(new FileReader(filePath));
+            String line = reader.readLine();
+            if(line == null){
+                reader.close();
+                throw new FileIsEmptyException("File is empty");
             }
-            myReader.close();
-        } catch (FileNotFoundException e) {
-            if(filePath == null){
-                throw new RuntimeException("filename cannot be null");
+            while (line != null) {
+                createElement(line);
+                line = reader.readLine();
             }
-            throw new RuntimeException("File not found");
+            reader.close();
+        } catch (IOException e) {
         }
     }
 
@@ -59,11 +64,8 @@ public class PrimAlgorithm implements MinSpanningTree {
     }
 
     private String addToHeap(){
-        Heap heap = new Heap();
         String ans = "";
-        ArrayList<String> added = new ArrayList<>();
         Element temp = new Element("", "", -1);
-        Element a = new Element("", "", -1);
 
         while(!graphElements.get(0).isEmpty()){
             temp = graphElements.get(0).getElements();
@@ -76,12 +78,7 @@ public class PrimAlgorithm implements MinSpanningTree {
             ans += temp.toString() + "|";
             for(int i = 0; i < graphElements.size(); i++){
                 if(graphElements.get(i).getName().equals(temp.getSecond())){
-                    while(!graphElements.get(i).isEmpty()){
-                        a = graphElements.get(i).getElements();
-                        if(!added.contains(a.getSecond())){
-                            heap.put(a);
-                        }
-                    }
+                    checkAndAddToHeapElemntIfNotInHeap(i);
                 }
             }
             added.add(temp.getSecond());
@@ -89,35 +86,30 @@ public class PrimAlgorithm implements MinSpanningTree {
                 temp = heap.pop();
             }
         }
+
+        if(added.size() != graphElements.size()){
+            throw new GraphIsNotCompleteException("Graph is not Completed");
+        }
+
         return ans.substring(0, ans.length() - 1); 
+    }
+
+    private void checkAndAddToHeapElemntIfNotInHeap(int i){
+        Element a = new Element("", "", -1);
+        while(!graphElements.get(i).isEmpty()){
+            a = graphElements.get(i).getElements();
+            if(!added.contains(a.getSecond())){
+                heap.put(a);
+            }
+        }
     }
 
     private void validateData(String[] t){
         if(t.length != 3){
-            throw new IllegalArgumentException("Bad data");
+            throw new IllegalFormatDataException("File contain illegal line");
         }
         if(t[0].equals(t[1]) || Integer.valueOf(t[2]) < 0){
-            throw new IllegalArgumentException("Data in file are incorrect");
-        }
-    }
-
-    private void validateIfGraphIsConnected(String a){
-        ArrayList<String> lista = new ArrayList<>();
-        for(int i = 0; i < a.length(); i += 2){
-            if((i - 2) % 6 != 0){
-                if(!lista.contains(a.substring(i, i + 1))){
-                    lista.add(a.substring(i, i + 1));
-                }
-            }
-        }
-        if(lista.size() != graphElements.size()){
-            throw new IllegalArgumentException("Graph in not connected");
-        }
-    }
-
-    private void validateMyReader(Scanner t){
-        if(t == null){
-            throw new IllegalArgumentException("File is empty");
+            throw new IllegalFormatDataException("File contain illegal line");
         }
     }
 }

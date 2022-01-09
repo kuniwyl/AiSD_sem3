@@ -10,6 +10,9 @@ public class Heap {
     }
 
     public void put(Element e) {
+        if(e == null){
+            throw new IllegalArgumentException();
+        }
         if (n == tree.length) {
             Element[] newTree = new Element[n * 2];
             System.arraycopy(tree, 0, newTree, 0, n);
