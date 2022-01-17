@@ -3,6 +3,7 @@ package pl.edu.pw.ee;
 import static java.lang.Math.min;
 import static java.util.stream.Collectors.toList;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +44,7 @@ public class DeterministicFiniteAutomatonTextSearch implements PatternSearch {
 
     public DeterministicFiniteAutomatonTextSearch(String pattern) {
         validateInput(pattern);
+        validateIfEmpty(pattern);
 
         this.pattern = pattern;
         buildTransitionMatrix();
@@ -58,10 +60,11 @@ public class DeterministicFiniteAutomatonTextSearch implements PatternSearch {
         int state = 0;
 
         for (int i = 0; i < n; i++) {
-            state = transMap.get(new Key(state, text.charAt(i)));
+            state = transMap.get(new Key(state, text.charAt(i))) != null ? transMap.get(new Key(state, text.charAt(i)))
+                    : 0;
 
             if (state == acceptedState) {
-                result = i - acceptedState;
+                result = i - acceptedState + 1;
                 break;
             }
         }
@@ -72,13 +75,31 @@ public class DeterministicFiniteAutomatonTextSearch implements PatternSearch {
     @Override
     public int[] findAll(String text) {
         validateInput(text);
+        ArrayList<Integer> temp = new ArrayList<>();
 
-        throw new UnsupportedOperationException("Not implemented yet.");
+        for (int i = 0; i < text.length(); i++) {
+            int res = findFirst(text.substring(i, text.length()));
+            if (res >= 0) {
+                i += res;
+                temp.add(i);
+            }
+        }
+        int[] tab = new int[temp.size()];
+        for (int i = 0; i < temp.size(); i++) {
+            tab[i] = temp.get(i);
+        }
+        return tab;
     }
 
     private void validateInput(String txt) {
         if (txt == null) {
             throw new IllegalArgumentException("Input text cannot be null!");
+        }
+    }
+
+    private void validateIfEmpty(String txt) {
+        if (txt == "") {
+            throw new IllegalArgumentException("Input text cannot be empty String!");
         }
     }
 
@@ -98,8 +119,6 @@ public class DeterministicFiniteAutomatonTextSearch implements PatternSearch {
                     k--;
                 }
 
-                System.out.println(String.format("sigma(%d, %c) = %d\n", q, sign, k));
-                
                 transMap.put(new Key(q, sign), k);
             }
         }
